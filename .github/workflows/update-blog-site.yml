@@ -22,7 +22,7 @@ jobs:
         id: extract-ghc
         run: |
           version=$(awk '/^with-compiler:/ {
-            sub(/with-compiler:[[:space:]]*/, "")
+            sub(/with-compiler:[[:space:]]*ghc-/, "")
             print
             exit
           }' cabal.project)
