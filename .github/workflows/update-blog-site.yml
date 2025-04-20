@@ -18,11 +18,21 @@ jobs:
           repository: ${{ env.TARGET_REPO }}
           ssh-key: ${{ env.DK }}
 
+      - name: Extract GHC version from cabal.project
+        id: extract-ghc
+        run: |
+          version=$(awk '/^with-compiler:/ {
+            sub(/with-compiler:[[:space:]]*/, "")
+            print
+            exit
+          }' cabal.project)
+          echo "version=${version}" >> $GITHUB_OUTPUT
+
       - name: Setup haskell environment
         uses: haskell-actions/setup@v2
         id: setup
         with:
-          ghc-version: 9.6.6
+          ghc-version: ${{ steps.extract-ghc.outputs.version }}
           cabal-version: 3.12.1
           cabal-update: true
 
